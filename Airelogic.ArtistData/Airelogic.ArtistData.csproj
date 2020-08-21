@@ -9,4 +9,9 @@
     <PackageReference Include="newtonsoft.json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AireLogic.MusixMatch\AireLogic.MusixMatch.csproj" />
+    <ProjectReference Include="..\AireLogic.ApiSeed\AireLogic.ApiSeed.csproj" />
+  </ItemGroup>
+
 </Project>

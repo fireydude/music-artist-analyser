@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Airelogic.ArtistData.MusixMatch.RespoonseModel;
-using ApiSeedModel = Airelogic.ArtistData.ApiSeed.ResponseModel;
+using AireLogic.ArtistData.Services;
+using ApiSeedModel = AireLogic.ApiSeed.ResponseModel;
 
-namespace Airelogic.ArtistData
+namespace AireLogic.ArtistData
 {
     class Program
     {
-        const string musixMatchApiKey = "c1ffdab49fecac0576a99d199b81fe0f";
 
 
         static void Main(string[] args)
@@ -20,60 +19,26 @@ namespace Airelogic.ArtistData
                 return;
             }
             var artistSearch = args[0];
-            var allWordCounts = new List<int>();
-            Artist artist = null;
+            var allWordCounts = new List<int>();            
 
-            var musixMatchClient = new HttpClient();
-            musixMatchClient.BaseAddress = new Uri("https://api.musixmatch.com/ws/1.1/");
-            var artistSearchResponse = musixMatchClient.GetAsync($"artist.search?apikey={musixMatchApiKey}&q_artist={artistSearch}&page_size=5")
-                .GetAwaiter()
-                .GetResult();
+            IMusicService musicService = new MusixMatchService();
+            var tracks = musicService.FindArtistTracks(artistSearch).GetAwaiter().GetResult();
 
-            if (artistSearchResponse.IsSuccessStatusCode)
+            foreach (var t in tracks)
             {
-                var content = artistSearchResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var root = Newtonsoft.Json.JsonConvert.DeserializeObject<RootNode<ArtistListBody>>(content);
-                Console.WriteLine("\nArtists");
-                foreach (var a in root.Message.Body.artist_list.Select(al => al.Artist))
+                Console.WriteLine($"{artistSearch} \n\t- {t}");
+                int wordCount;
+                if (LyricWordCount(artistSearch, t, out wordCount))
                 {
-                    Console.WriteLine($"{a.artist_id} {a.artist_name} {a.artist_rating} {a.artist_country}");
-                }
-                artist = root.Message.Body.artist_list.FirstOrDefault().Artist;
-
-                var trackResponse = musixMatchClient.GetAsync($"track.search?apikey={musixMatchApiKey}&f_artist_id={artist.artist_id}")
-                    .GetAwaiter()
-                    .GetResult();
-
-                if (trackResponse.IsSuccessStatusCode)
-                {
-                    var trackContent = trackResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                    var trackRoot = Newtonsoft.Json.JsonConvert.DeserializeObject<RootNode<TrackListBody>>(trackContent);
-                    Console.WriteLine("\nTop 10 Tracks");
-                    foreach (var t in trackRoot.Message.Body.track_list.Select(t => t.track))
-                    {
-                        Console.WriteLine($"{t.track_name} \n\t- {t.album_name}");
-                        int wordCount;
-                        if(LyricWordCount(artist.artist_name, t.track_name, out wordCount))
-                        {
-                            allWordCounts.Add(wordCount);
-                            Console.WriteLine($"Word Count: {wordCount}\n");
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(trackResponse.ReasonPhrase);
+                    allWordCounts.Add(wordCount);
+                    Console.WriteLine($"Word Count: {wordCount}\n");
                 }
             }
-            else
-            {
-                Console.WriteLine(artistSearchResponse.ReasonPhrase);
-            }
 
-            if (artist != null)
+            if (tracks != null)
             {
                 var averageWordCount = allWordCounts.Sum() / allWordCounts.Count();
-                Console.WriteLine($"The average number of words for a song by {artist.artist_name} is {averageWordCount}");
+                Console.WriteLine($"The average number of words for a song by {artistSearch} is {averageWordCount}");
             }
         }
 

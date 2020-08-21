@@ -1,4 +1,4 @@
-namespace Airelogic.ArtistData.ApiSeed.ResponseModel
+namespace AireLogic.ApiSeed.ResponseModel
 {
     public class RootNode
     {

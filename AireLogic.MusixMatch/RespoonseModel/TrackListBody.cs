@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Airelogic.ArtistData.MusixMatch.RespoonseModel
+namespace AireLogic.MusixMatch.RespoonseModel
 {
     public class TrackListBody
     {

@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Airelogic.ArtistData/bin/Debug/netcoreapp3.1/Airelogic.ArtistData.dll",
+            "program": "${workspaceFolder}/AireLogic.ArtistData/bin/Debug/netcoreapp3.1/AireLogic.ArtistData.dll",
             "args": [ "the beetles" ],
-            "cwd": "${workspaceFolder}/Airelogic.ArtistData",
+            "cwd": "${workspaceFolder}/AireLogic.ArtistData",
             "console": "internalConsole",
             "stopAtEntry": false
         },

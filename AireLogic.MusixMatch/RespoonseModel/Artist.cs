@@ -1,4 +1,4 @@
-namespace Airelogic.ArtistData.MusixMatch.RespoonseModel
+namespace AireLogic.MusixMatch.RespoonseModel
 {
     public class Artist
     {
