@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Net.Http;
 using AireLogic.ArtistData.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using ApiSeedModel = AireLogic.ApiSeed.ResponseModel;
 
 namespace AireLogic.ArtistData
@@ -12,61 +14,35 @@ namespace AireLogic.ArtistData
 
         static void Main(string[] args)
         {
-            if (args.Length != 1)
-            {
-                Console.WriteLine("Please provide one argument, which will be the artist name");
-                return;
-            }
-            var artistSearch = args[0];
-            var allWordCounts = new List<int>();
+            var builder = new ConfigurationBuilder();
+            BuildConfig(builder);
 
-            IMusicService musicService = new MusixMatchService();
-            var tracks = musicService.FindArtistTracks(artistSearch).GetAwaiter().GetResult();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Build())
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
 
-            var lyricService = new ApiSeedsService();
-            foreach (var t in tracks)
-            {
-                Console.WriteLine($"{artistSearch} \n\t- {t}");
-                var lyrics = lyricService.GetLyrics(artistSearch, t)
-                    .GetAwaiter()
-                    .GetResult();
-
-                var wordCount = string.IsNullOrEmpty(lyrics) ? 0 : CountWords(lyrics);
-                if (!string.IsNullOrEmpty(lyrics))
+            Log.Logger.Information("Application Starting");
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
                 {
-                    allWordCounts.Add(wordCount);
-                    Console.WriteLine($"Word Count: {wordCount}\n");
-                }
-            }
+                    // TODO: allow for different services
+                    services.AddTransient<IMusicService, MusixMatchService>();
+                    services.AddTransient<ILyricService, ApiSeedsService>();
+                    services.AddTransient<IArtistAnalyser, ArtistAnalyser>();
+                })
+                .UseSerilog()
+                .Build();
 
-            if (tracks != null)
-            {
-                var averageWordCount = allWordCounts.Sum() / allWordCounts.Count();
-                Console.WriteLine($"The average number of words for a song by {artistSearch} is {averageWordCount}");
-            }
+            var startupClass = ActivatorUtilities.CreateInstance<ArtistAnalyser>(host.Services);
+            startupClass.Run(args).GetAwaiter().GetResult();
         }
 
-        static bool LyricWordCount(string artist, string track, out int count)
+        static void BuildConfig(IConfigurationBuilder builder)
         {
-            var lyricService = new ApiSeedsService();
-            var lyrics = lyricService.GetLyrics(artist, track)
-                .GetAwaiter()
-                .GetResult();
-
-            count = string.IsNullOrEmpty(lyrics) ? 0 : CountWords(lyrics);
-            return !string.IsNullOrEmpty(lyrics);
-        }
-
-        static int CountWords(string songText)
-        {
-            var count = 0;
-            foreach (var line in songText.Split('\n'))
-            {
-                if (line.StartsWith('['))
-                    continue;
-                count += line.Trim().Split(' ').Count();
-            }
-            return count;
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
         }
     }
 }

@@ -2,12 +2,23 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using AireLogic.ApiSeed.ResponseModel;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace AireLogic.ArtistData.Services
 {
     public class ApiSeedsService : ILyricService
     {
+        private readonly ILogger<ApiSeedsService> _logger;
+        private readonly IConfiguration _configuration;
+
+        public ApiSeedsService(ILogger<ApiSeedsService> logger, IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _logger = logger;
+        }
+
         public async Task<string> GetLyrics(string artist, string track)
         {
             // remove text at the end of the track name which is not relevant
@@ -15,11 +26,12 @@ namespace AireLogic.ArtistData.Services
             if (trackSuffixIndex > 0)
                 track = track.Substring(0, trackSuffixIndex);
 
+            var baseUrl = _configuration.GetValue<string>("ApiSeeds:BaseUrl");
+            var apiKey = _configuration.GetValue<string>("ApiSeeds:ApiKey");
             var apiSeedClient = new HttpClient
             {
-                BaseAddress = new Uri("https://orion.apiseeds.com/")
+                BaseAddress = new Uri(baseUrl)
             };
-            const string apiKey = "x3ALheLaELqwzOckiIUxMw2WS5DVbxZySuKpLgefJiECPLPTTYxA2heer8pcStx2";
             var response = await apiSeedClient.GetAsync($"api/music/lyric/{artist}/{track}?apikey={apiKey}");
 
             if (response.IsSuccessStatusCode)
@@ -30,7 +42,7 @@ namespace AireLogic.ArtistData.Services
             }
             else
             {
-                Console.WriteLine($"Lyrics could not be loaded: {response.ReasonPhrase}");
+                _logger.LogWarning("Lyrics could not be loaded: {0}", response.ReasonPhrase);
             }
             return string.Empty;
         }
