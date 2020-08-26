@@ -4,6 +4,6 @@ namespace AireLogic.ArtistData
 {
     public interface IArtistAnalyser
     {
-        Task Run(string[] args);
+        Task<int?> Run(string[] args);
     }
 }

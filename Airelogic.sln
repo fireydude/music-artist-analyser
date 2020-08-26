@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AireLogic.ApiSeed", "AireLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AireLogic.ArtistData.ApiTest", "AireLogic.ArtistData.ApiTest\AireLogic.ArtistData.ApiTest.csproj", "{2BA219F6-0C93-47A6-99AA-F17DA33EFA34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AireLogic.ArtistData.Test", "AireLogic.ArtistData.Test\AireLogic.ArtistData.Test.csproj", "{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,17 @@ Global
 		{2BA219F6-0C93-47A6-99AA-F17DA33EFA34}.Release|x64.Build.0 = Release|Any CPU
 		{2BA219F6-0C93-47A6-99AA-F17DA33EFA34}.Release|x86.ActiveCfg = Release|Any CPU
 		{2BA219F6-0C93-47A6-99AA-F17DA33EFA34}.Release|x86.Build.0 = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|x64.Build.0 = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Debug|x86.Build.0 = Debug|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|x64.ActiveCfg = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|x64.Build.0 = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|x86.ActiveCfg = Release|Any CPU
+		{0EB4FC5D-8CBB-4EF5-9004-2EF6D1309F79}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -5,6 +5,7 @@ using Moq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 namespace AireLogic.ArtistData.ApiTest.Services
 {
@@ -37,7 +38,7 @@ namespace AireLogic.ArtistData.ApiTest.Services
         {
             var response = await Target.FindArtistTracks(ArtistName);
 
-            Assert.NotEmpty(response);
+            response.Should().ContainMatch("Strawberry Fields Forever*");
         }
 
         private IMusicService Target

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
 
 namespace AireLogic.ArtistData.ApiTest.Services
 {
@@ -37,7 +38,7 @@ namespace AireLogic.ArtistData.ApiTest.Services
         {
             var response = await Target.GetLyrics(ArtistName, SongName);
 
-            Assert.NotEmpty(response);
+            response.Should().StartWith("In the town where I was born");
         }
 
         public ILyricService Target

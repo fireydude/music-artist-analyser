@@ -20,12 +20,12 @@ namespace AireLogic.ArtistData
             _lyricService = lyricService;
         }
 
-        public async Task Run(string[] args)
+        public async Task<int?> Run(string[] args)
         {
             if (args.Length != 1)
             {
-                Console.WriteLine("Please provide one argument, which will be the artist name");
-                return;
+                _logger.LogError("Please provide one argument, which will be the artist name");
+                return null;
             }
             var artistSearch = args[0];
             var allWordCounts = new List<int>();
@@ -50,7 +50,9 @@ namespace AireLogic.ArtistData
             {
                 var averageWordCount = allWordCounts.Sum() / allWordCounts.Count();
                 Console.WriteLine($"The average number of words for a song by {artistSearch} is {averageWordCount}");
+                return averageWordCount;
             }
+            return null;
         }
 
         private int CountWords(string songText)
