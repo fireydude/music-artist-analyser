@@ -8,7 +8,7 @@ The original test can be found in `Interact with APIs.pdf` at the route of this 
  A console application was produced which uses two APIs to first build a list of tracks for a given artist, then retrieve the lyrics for each track.  A calculation is then used to get the average number of words per song for the artist.
 
  ## Development Environment
- VS Code was used to debug the project.  Please install dotnet core 3.1 and the C# extension if  you wish to load the project from VS Code.  A solution file has been included so Visual Studio 2019 could also be used to debug the project.
+ VS Code was used to debug the project.  Please install dotnet core 3.1 and the C# extension if  you wish to load the project from VS Code.  A solution file has been included so Visual Studio 2019 could also be used to debug the project. XUnit requires the `.NET Core Test Explorer` extension for debugging VS Code, Visual Studio 2019 has an XUnit extension.
 
 ### External Dependencies
 The following APIs were used to return data about the Music and Lyrics
